@@ -1,0 +1,489 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AgencyModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Agents">
+    <Key>
+      <PropertyRef Name="AgentID" />
+    </Key>
+    <Property Name="AgentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_Agents_Users" FromRole="Agents" ToRole="Users" />
+    <NavigationProperty Name="Deals" Relationship="Self.FK_Deal_Agent" FromRole="Agents" ToRole="Deals" />
+    <NavigationProperty Name="Objects" Relationship="Self.FK_Obj_Agent" FromRole="Agents" ToRole="Objects" />
+    <NavigationProperty Name="Viewings" Relationship="Self.FK_View_Agent" FromRole="Agents" ToRole="Viewings" />
+  </EntityType>
+  <EntityType Name="Buyers">
+    <Key>
+      <PropertyRef Name="BuyerID" />
+    </Key>
+    <Property Name="BuyerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="RegDate" Type="DateTime" Precision="0" />
+    <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_Buyers_Users" FromRole="Buyers" ToRole="Users" />
+    <NavigationProperty Name="Deals" Relationship="Self.FK_Deal_Buyer" FromRole="Buyers" ToRole="Deals" />
+    <NavigationProperty Name="Requests" Relationship="Self.FK_Req_Buyer" FromRole="Buyers" ToRole="Requests" />
+    <NavigationProperty Name="Viewings" Relationship="Self.FK_View_Buyer" FromRole="Buyers" ToRole="Viewings" />
+  </EntityType>
+  <EntityType Name="Deals">
+    <Key>
+      <PropertyRef Name="DealID" />
+    </Key>
+    <Property Name="DealID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ObjectID" Type="Int32" Nullable="false" />
+    <Property Name="BuyerID" Type="Int32" Nullable="false" />
+    <Property Name="SellerID" Type="Int32" Nullable="false" />
+    <Property Name="AgentID" Type="Int32" Nullable="false" />
+    <Property Name="DealDate" Type="DateTime" Precision="0" />
+    <Property Name="FinalPrice" Type="Decimal" Precision="15" Scale="2" />
+    <Property Name="Commission" Type="Decimal" Precision="15" Scale="2" />
+    <Property Name="StatusID" Type="Int32" Nullable="false" />
+    <Property Name="ContractPath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Agents" Relationship="Self.FK_Deal_Agent" FromRole="Deals" ToRole="Agents" />
+    <NavigationProperty Name="Buyers" Relationship="Self.FK_Deal_Buyer" FromRole="Deals" ToRole="Buyers" />
+    <NavigationProperty Name="Objects" Relationship="Self.FK_Deal_Obj" FromRole="Deals" ToRole="Objects" />
+    <NavigationProperty Name="Sellers" Relationship="Self.FK_Deal_Seller" FromRole="Deals" ToRole="Sellers" />
+    <NavigationProperty Name="DealStatuses" Relationship="Self.FK_Deal_Status" FromRole="Deals" ToRole="DealStatuses" />
+    <NavigationProperty Name="LegalChecks" Relationship="Self.FK_Legal_Deal" FromRole="Deals" ToRole="LegalChecks" />
+  </EntityType>
+  <EntityType Name="DealStatuses">
+    <Key>
+      <PropertyRef Name="StatusID" />
+    </Key>
+    <Property Name="StatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Deals" Relationship="Self.FK_Deal_Status" FromRole="DealStatuses" ToRole="Deals" />
+  </EntityType>
+  <EntityType Name="LegalChecks">
+    <Key>
+      <PropertyRef Name="CheckID" />
+    </Key>
+    <Property Name="CheckID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ObjectID" Type="Int32" Nullable="false" />
+    <Property Name="DealID" Type="Int32" />
+    <Property Name="ResultText" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Comments" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CheckDate" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Deals" Relationship="Self.FK_Legal_Deal" FromRole="LegalChecks" ToRole="Deals" />
+    <NavigationProperty Name="Objects" Relationship="Self.FK_Legal_Obj" FromRole="LegalChecks" ToRole="Objects" />
+  </EntityType>
+  <EntityType Name="Objects">
+    <Key>
+      <PropertyRef Name="ObjectID" />
+    </Key>
+    <Property Name="ObjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SellerID" Type="Int32" Nullable="false" />
+    <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="TypeID" Type="Int32" Nullable="false" />
+    <Property Name="Area" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Price" Type="Decimal" Precision="15" Scale="2" />
+    <Property Name="StatusID" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="AddedByAgentID" Type="Int32" />
+    <NavigationProperty Name="Agents" Relationship="Self.FK_Obj_Agent" FromRole="Objects" ToRole="Agents" />
+    <NavigationProperty Name="Deals" Relationship="Self.FK_Deal_Obj" FromRole="Objects" ToRole="Deals" />
+    <NavigationProperty Name="LegalChecks" Relationship="Self.FK_Legal_Obj" FromRole="Objects" ToRole="LegalChecks" />
+    <NavigationProperty Name="Sellers" Relationship="Self.FK_Obj_Seller" FromRole="Objects" ToRole="Sellers" />
+    <NavigationProperty Name="ObjectStatuses" Relationship="Self.FK_Obj_Status" FromRole="Objects" ToRole="ObjectStatuses" />
+    <NavigationProperty Name="ObjectTypes" Relationship="Self.FK_Obj_Type" FromRole="Objects" ToRole="ObjectTypes" />
+    <NavigationProperty Name="Viewings" Relationship="Self.FK_View_Obj" FromRole="Objects" ToRole="Viewings" />
+  </EntityType>
+  <EntityType Name="ObjectStatuses">
+    <Key>
+      <PropertyRef Name="StatusID" />
+    </Key>
+    <Property Name="StatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Objects" Relationship="Self.FK_Obj_Status" FromRole="ObjectStatuses" ToRole="Objects" />
+  </EntityType>
+  <EntityType Name="ObjectTypes">
+    <Key>
+      <PropertyRef Name="TypeID" />
+    </Key>
+    <Property Name="TypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Objects" Relationship="Self.FK_Obj_Type" FromRole="ObjectTypes" ToRole="Objects" />
+  </EntityType>
+  <EntityType Name="Requests">
+    <Key>
+      <PropertyRef Name="RequestID" />
+    </Key>
+    <Property Name="RequestID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="BuyerID" Type="Int32" Nullable="false" />
+    <Property Name="Criteria" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsActive" Type="Boolean" />
+    <NavigationProperty Name="Buyers" Relationship="Self.FK_Req_Buyer" FromRole="Requests" ToRole="Buyers" />
+  </EntityType>
+  <EntityType Name="Sellers">
+    <Key>
+      <PropertyRef Name="SellerID" />
+    </Key>
+    <Property Name="SellerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int32" Nullable="false" />
+    <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MiddleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="RegDate" Type="DateTime" Precision="0" />
+    <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Deals" Relationship="Self.FK_Deal_Seller" FromRole="Sellers" ToRole="Deals" />
+    <NavigationProperty Name="Objects" Relationship="Self.FK_Obj_Seller" FromRole="Sellers" ToRole="Objects" />
+    <NavigationProperty Name="Users" Relationship="Self.FK_Sellers_Users" FromRole="Sellers" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Login" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="IsActive" Type="Boolean" />
+    <Property Name="IsEmailConfirmed" Type="Boolean" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="0" />
+    <Property Name="LastLoginDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Agents" Relationship="Self.FK_Agents_Users" FromRole="Users" ToRole="Agents" />
+    <NavigationProperty Name="Buyers" Relationship="Self.FK_Buyers_Users" FromRole="Users" ToRole="Buyers" />
+    <NavigationProperty Name="Sellers" Relationship="Self.FK_Sellers_Users" FromRole="Users" ToRole="Sellers" />
+  </EntityType>
+  <EntityType Name="Viewings">
+    <Key>
+      <PropertyRef Name="ViewingID" />
+    </Key>
+    <Property Name="ViewingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ObjectID" Type="Int32" Nullable="false" />
+    <Property Name="BuyerID" Type="Int32" Nullable="false" />
+    <Property Name="AgentID" Type="Int32" Nullable="false" />
+    <Property Name="ViewDate" Type="DateTime" Precision="3" />
+    <Property Name="ActSigned" Type="Boolean" />
+    <Property Name="ActPath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Agents" Relationship="Self.FK_View_Agent" FromRole="Viewings" ToRole="Agents" />
+    <NavigationProperty Name="Buyers" Relationship="Self.FK_View_Buyer" FromRole="Viewings" ToRole="Buyers" />
+    <NavigationProperty Name="Objects" Relationship="Self.FK_View_Obj" FromRole="Viewings" ToRole="Objects" />
+  </EntityType>
+  <Association Name="FK_Agents_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Agents" Type="Self.Agents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Agents">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Deal_Agent">
+    <End Role="Agents" Type="Self.Agents" Multiplicity="1" />
+    <End Role="Deals" Type="Self.Deals" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agents">
+        <PropertyRef Name="AgentID" />
+      </Principal>
+      <Dependent Role="Deals">
+        <PropertyRef Name="AgentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Obj_Agent">
+    <End Role="Agents" Type="Self.Agents" Multiplicity="0..1" />
+    <End Role="Objects" Type="Self.Objects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agents">
+        <PropertyRef Name="AgentID" />
+      </Principal>
+      <Dependent Role="Objects">
+        <PropertyRef Name="AddedByAgentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_View_Agent">
+    <End Role="Agents" Type="Self.Agents" Multiplicity="1" />
+    <End Role="Viewings" Type="Self.Viewings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Agents">
+        <PropertyRef Name="AgentID" />
+      </Principal>
+      <Dependent Role="Viewings">
+        <PropertyRef Name="AgentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Buyers_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Buyers" Type="Self.Buyers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Buyers">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Deal_Buyer">
+    <End Role="Buyers" Type="Self.Buyers" Multiplicity="1" />
+    <End Role="Deals" Type="Self.Deals" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Buyers">
+        <PropertyRef Name="BuyerID" />
+      </Principal>
+      <Dependent Role="Deals">
+        <PropertyRef Name="BuyerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Req_Buyer">
+    <End Role="Buyers" Type="Self.Buyers" Multiplicity="1" />
+    <End Role="Requests" Type="Self.Requests" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Buyers">
+        <PropertyRef Name="BuyerID" />
+      </Principal>
+      <Dependent Role="Requests">
+        <PropertyRef Name="BuyerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_View_Buyer">
+    <End Role="Buyers" Type="Self.Buyers" Multiplicity="1" />
+    <End Role="Viewings" Type="Self.Viewings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Buyers">
+        <PropertyRef Name="BuyerID" />
+      </Principal>
+      <Dependent Role="Viewings">
+        <PropertyRef Name="BuyerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Deal_Obj">
+    <End Role="Objects" Type="Self.Objects" Multiplicity="1" />
+    <End Role="Deals" Type="Self.Deals" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Objects">
+        <PropertyRef Name="ObjectID" />
+      </Principal>
+      <Dependent Role="Deals">
+        <PropertyRef Name="ObjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Deal_Seller">
+    <End Role="Sellers" Type="Self.Sellers" Multiplicity="1" />
+    <End Role="Deals" Type="Self.Deals" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sellers">
+        <PropertyRef Name="SellerID" />
+      </Principal>
+      <Dependent Role="Deals">
+        <PropertyRef Name="SellerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Deal_Status">
+    <End Role="DealStatuses" Type="Self.DealStatuses" Multiplicity="1" />
+    <End Role="Deals" Type="Self.Deals" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="DealStatuses">
+        <PropertyRef Name="StatusID" />
+      </Principal>
+      <Dependent Role="Deals">
+        <PropertyRef Name="StatusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Legal_Deal">
+    <End Role="Deals" Type="Self.Deals" Multiplicity="0..1" />
+    <End Role="LegalChecks" Type="Self.LegalChecks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Deals">
+        <PropertyRef Name="DealID" />
+      </Principal>
+      <Dependent Role="LegalChecks">
+        <PropertyRef Name="DealID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Legal_Obj">
+    <End Role="Objects" Type="Self.Objects" Multiplicity="1" />
+    <End Role="LegalChecks" Type="Self.LegalChecks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Objects">
+        <PropertyRef Name="ObjectID" />
+      </Principal>
+      <Dependent Role="LegalChecks">
+        <PropertyRef Name="ObjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Obj_Seller">
+    <End Role="Sellers" Type="Self.Sellers" Multiplicity="1" />
+    <End Role="Objects" Type="Self.Objects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Sellers">
+        <PropertyRef Name="SellerID" />
+      </Principal>
+      <Dependent Role="Objects">
+        <PropertyRef Name="SellerID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Obj_Status">
+    <End Role="ObjectStatuses" Type="Self.ObjectStatuses" Multiplicity="1" />
+    <End Role="Objects" Type="Self.Objects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ObjectStatuses">
+        <PropertyRef Name="StatusID" />
+      </Principal>
+      <Dependent Role="Objects">
+        <PropertyRef Name="StatusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Obj_Type">
+    <End Role="ObjectTypes" Type="Self.ObjectTypes" Multiplicity="1" />
+    <End Role="Objects" Type="Self.Objects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ObjectTypes">
+        <PropertyRef Name="TypeID" />
+      </Principal>
+      <Dependent Role="Objects">
+        <PropertyRef Name="TypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_View_Obj">
+    <End Role="Objects" Type="Self.Objects" Multiplicity="1" />
+    <End Role="Viewings" Type="Self.Viewings" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Objects">
+        <PropertyRef Name="ObjectID" />
+      </Principal>
+      <Dependent Role="Viewings">
+        <PropertyRef Name="ObjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Sellers_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Sellers" Type="Self.Sellers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Sellers">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="AgencyEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Agents" EntityType="Self.Agents" />
+    <EntitySet Name="Buyers" EntityType="Self.Buyers" />
+    <EntitySet Name="Deals" EntityType="Self.Deals" />
+    <EntitySet Name="DealStatuses" EntityType="Self.DealStatuses" />
+    <EntitySet Name="LegalChecks" EntityType="Self.LegalChecks" />
+    <EntitySet Name="Objects" EntityType="Self.Objects" />
+    <EntitySet Name="ObjectStatuses" EntityType="Self.ObjectStatuses" />
+    <EntitySet Name="ObjectTypes" EntityType="Self.ObjectTypes" />
+    <EntitySet Name="Requests" EntityType="Self.Requests" />
+    <EntitySet Name="Sellers" EntityType="Self.Sellers" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="Users" EntityType="Self.Users" />
+    <EntitySet Name="Viewings" EntityType="Self.Viewings" />
+    <AssociationSet Name="FK_Agents_Users" Association="Self.FK_Agents_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Agents" EntitySet="Agents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Deal_Agent" Association="Self.FK_Deal_Agent">
+      <End Role="Agents" EntitySet="Agents" />
+      <End Role="Deals" EntitySet="Deals" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Obj_Agent" Association="Self.FK_Obj_Agent">
+      <End Role="Agents" EntitySet="Agents" />
+      <End Role="Objects" EntitySet="Objects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_View_Agent" Association="Self.FK_View_Agent">
+      <End Role="Agents" EntitySet="Agents" />
+      <End Role="Viewings" EntitySet="Viewings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Buyers_Users" Association="Self.FK_Buyers_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Buyers" EntitySet="Buyers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Deal_Buyer" Association="Self.FK_Deal_Buyer">
+      <End Role="Buyers" EntitySet="Buyers" />
+      <End Role="Deals" EntitySet="Deals" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Req_Buyer" Association="Self.FK_Req_Buyer">
+      <End Role="Buyers" EntitySet="Buyers" />
+      <End Role="Requests" EntitySet="Requests" />
+    </AssociationSet>
+    <AssociationSet Name="FK_View_Buyer" Association="Self.FK_View_Buyer">
+      <End Role="Buyers" EntitySet="Buyers" />
+      <End Role="Viewings" EntitySet="Viewings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Deal_Obj" Association="Self.FK_Deal_Obj">
+      <End Role="Objects" EntitySet="Objects" />
+      <End Role="Deals" EntitySet="Deals" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Deal_Seller" Association="Self.FK_Deal_Seller">
+      <End Role="Sellers" EntitySet="Sellers" />
+      <End Role="Deals" EntitySet="Deals" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Deal_Status" Association="Self.FK_Deal_Status">
+      <End Role="DealStatuses" EntitySet="DealStatuses" />
+      <End Role="Deals" EntitySet="Deals" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Legal_Deal" Association="Self.FK_Legal_Deal">
+      <End Role="Deals" EntitySet="Deals" />
+      <End Role="LegalChecks" EntitySet="LegalChecks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Legal_Obj" Association="Self.FK_Legal_Obj">
+      <End Role="Objects" EntitySet="Objects" />
+      <End Role="LegalChecks" EntitySet="LegalChecks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Obj_Seller" Association="Self.FK_Obj_Seller">
+      <End Role="Sellers" EntitySet="Sellers" />
+      <End Role="Objects" EntitySet="Objects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Obj_Status" Association="Self.FK_Obj_Status">
+      <End Role="ObjectStatuses" EntitySet="ObjectStatuses" />
+      <End Role="Objects" EntitySet="Objects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Obj_Type" Association="Self.FK_Obj_Type">
+      <End Role="ObjectTypes" EntitySet="ObjectTypes" />
+      <End Role="Objects" EntitySet="Objects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_View_Obj" Association="Self.FK_View_Obj">
+      <End Role="Objects" EntitySet="Objects" />
+      <End Role="Viewings" EntitySet="Viewings" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Sellers_Users" Association="Self.FK_Sellers_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Sellers" EntitySet="Sellers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
